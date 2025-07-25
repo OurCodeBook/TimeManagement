@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Stopwatch</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, rgb(239, 190, 251), rgb(200, 150, 230));
+      background-size: 400% 400%;
+      animation: gradientShift 8s ease infinite;
+      font-family: 'Smile Everyday', cursive;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: rgb(140, 39, 233);
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .display {
+      font-size: 4rem;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+
+    .milliseconds {
+      font-size: 1.5rem;
+      color: rgba(140, 39, 233, 0.8);
+    }
+
+    .buttons {
+      display: flex;
+      gap: 15px;
+    }
+
+    .btn {
+      padding: 15px 30px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+
+    .start { background: rgb(140, 39, 233); color: white; }
+    .pause { background: rgb(140, 39, 233); color: white; }
+    .reset { background: rgb(140, 39, 233); color: white; }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Stopwatch</h1>
+
+  <div class="display">
+    <span id="time">00:00:00</span>
+    <div class="milliseconds" id="ms">000</div>
+  </div>
+
+  <div class="buttons">
+    <button class="btn start" onclick="startStopwatch()">Start</button>
+    <button class="btn pause" onclick="pauseStopwatch()">Pause</button>
+    <button class="btn reset" onclick="resetStopwatch()">Reset</button>
+  </div>
+
+  <script>
+    let stopwatchInterval;
+    let elapsed = 0;
+    let running = false;
+
+    function updateStopwatch() {
+      elapsed += 10;
+      const ms = elapsed % 1000;
+      const totalSec = Math.floor(elapsed / 1000);
+      const hrs = Math.floor(totalSec / 3600);
+      const mins = Math.floor((totalSec % 3600) / 60);
+      const secs = totalSec % 60;
+
+      document.getElementById('time').textContent =
+        `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      document.getElementById('ms').textContent = String(ms).padStart(3, '0');
+    }
+
+    function startStopwatch() {
+      if (!running) {
+        stopwatchInterval = setInterval(updateStopwatch, 10);
+        running = true;
+      }
+    }
+
+    function pauseStopwatch() {
+      clearInterval(stopwatchInterval);
+      running = false;
+    }
+
+    function resetStopwatch() {
+      clearInterval(stopwatchInterval);
+      elapsed = 0;
+      running = false;
+      document.getElementById('time').textContent = "00:00:00";
+      document.getElementById('ms').textContent = "000";
+    }
+  </script>
+</body>
+</html>
